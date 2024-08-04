@@ -2,7 +2,7 @@ import { IsNumber, IsOptional, IsString, validate, ValidationError } from "class
 import { response } from "../../../helper/response"
 import { Res } from "../../../interface/router"
 
-export class UserDto {
+export class CreateUserDto {
     @IsString()
     name: string
 
@@ -21,7 +21,7 @@ export class UserDto {
             if (err.length > 0) {
                 return response(r, err.map(({ 
                     property, constraints
-                })=> ({ property, constraints })))
+                })=> ({ property, constraints })),400)
             }
         })
     }

@@ -1,6 +1,6 @@
 import { DataSource, FindOneOptions, Repository } from "typeorm";
 import { User } from "../../model/user.entity";
-import { UserDto } from "./dto/user.dto";
+import { CreateUserDto } from "./dto/user.dto";
 
 export class UserRepository{
     private userRepo: Repository<User>
@@ -16,7 +16,7 @@ export class UserRepository{
         return this.userRepo.find()
     }
 
-    create(dto: UserDto){
+    create(dto: CreateUserDto){
         return this.userRepo.save(dto)
     }
 }

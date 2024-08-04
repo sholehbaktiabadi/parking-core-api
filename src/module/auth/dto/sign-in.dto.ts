@@ -7,13 +7,13 @@ export class SignIn{
     email: string
     @IsString()
     password: string
-    
+
     validation(r: Res, obj: this) {
         validate(obj).then((err: ValidationError[]) => {
             if (err.length > 0) {
                 return response(r, err.map(({ 
                     property, constraints
-                })=> ({ property, constraints })))
+                })=> ({ property, constraints })),400)
             }
         })
     }

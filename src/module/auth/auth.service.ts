@@ -3,7 +3,7 @@ import { compareHashPassword, hashPassword } from "../../helper/bcrypt";
 import { generateToken } from "../../helper/jwt";
 import { response } from "../../helper/response";
 import { Res } from "../../interface/router";
-import { UserDto } from "../user/dto/user.dto";
+import { CreateUserDto } from "../user/dto/user.dto";
 import { UserRepository } from "../user/user.repository";
 import { SignIn } from "./dto/sign-in.dto";
 
@@ -21,7 +21,7 @@ export class AuthService {
         return generateToken(user)
     }
 
-    async register(r: Res, dto: UserDto) {
+    async register(r: Res, dto: CreateUserDto) {
         const { password, email } = dto
         dto.password = hashPassword(password)
         const isEmailExist = await this.userRepo.fetchOne({
