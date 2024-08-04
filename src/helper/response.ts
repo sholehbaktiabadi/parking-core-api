@@ -11,6 +11,5 @@ class Response {
 
 export function response(res: Res, message: any, statusCode?: number) {
     const r = new Response(statusCode ?? 200, message)
-    res.status(r.statusCode)
-    return res.send(r)
+    return res.status(r.statusCode).send(r)
 }

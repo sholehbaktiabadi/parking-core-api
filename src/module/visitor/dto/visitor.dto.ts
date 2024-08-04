@@ -1,7 +1,5 @@
-import { IsDate, IsEnum, IsNumber, IsString, validate, ValidationError } from "class-validator"
-import { PaymentEnum, VisitorEnum } from "../../../enum/visitor"
-import { response } from "../../../helper/response"
-import { Res } from "../../../interface/router"
+import { IsEnum, IsNumber, IsOptional, IsString, ValidateIf } from "class-validator"
+import { PaymentEnum, VisitorEnum, VisitorStatus } from "../../../enum/visitor"
 
 export class CreateVisitorDto{
     @IsString()
@@ -9,29 +7,23 @@ export class CreateVisitorDto{
 
     @IsEnum(VisitorEnum)
     type: VisitorEnum
-
-    validation(r: Res, obj: this) {
-        validate(obj).then((err: ValidationError[]) => {
-            if (err.length > 0) {
-                return response(r, err.map(({ 
-                    property, constraints
-                })=> ({ property, constraints })),400)
-            }
-        })
-    }
 }
 
 export class UpdateVisitorDto{
     @IsEnum(PaymentEnum)
     paymentType: PaymentEnum
 
-    validation(r: Res, obj: this) {
-        validate(obj).then((err: ValidationError[]) => {
-            if (err.length > 0) {
-                return response(r, err.map(({ 
-                    property, constraints
-                })=> ({ property, constraints })),400)
-            }
-        })
-    }
+    @IsNumber()
+    quantity: number
+
+    @IsNumber()
+    grandTotal: number
+
+    @IsEnum(VisitorStatus)
+    @IsOptional()
+    status: VisitorStatus = VisitorStatus.COMPLETED
+
+    @ValidateIf(o => o.status == VisitorStatus.FAILED)
+    @IsString()
+    reason: string
 }
