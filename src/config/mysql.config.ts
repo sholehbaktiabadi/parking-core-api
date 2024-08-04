@@ -1,16 +1,16 @@
 import { DataSource } from "typeorm";
-import env from "./env.config";
 import { User } from "../model/user.entity";
+import { env } from "./env.config";
 
 export const AppDataSource = new DataSource({
     type: "mysql",
-    host: env.mysql.MYSQL_HOST,
-    port: env.mysql.MYSQL_PORT,
-    username: env.mysql.MYSQL_USER,
-    password: env.mysql.MYSQL_PASS,
-    database: env.mysql.MYSQL_NAME,
+    host: env.mysql.HOST,
+    port: env.mysql.PORT,
+    username: env.mysql.USER,
+    password: env.mysql.PASS,
+    database: env.mysql.NAME,
     synchronize: true,
-    logging: true,
+    logging: false,
     entities: [User],
     subscribers: [],
     migrations: [],

@@ -1,15 +1,16 @@
 import * as _ from "dotenv"
 _.config()
 
-const getEnv = () => ({
+export const env = ({
     mysql: {
-        MYSQL_HOST: process.env.MYSQL_HOST,
-        MYSQL_PORT: +process.env.MYSQL_PORT,
-        MYSQL_NAME: process.env.MYSQL_NAME,
-        MYSQL_PASS: process.env.MYSQL_PASS,
-        MYSQL_USER: process.env.MYSQL_USER
+        HOST: process.env.MYSQL_HOST,
+        PORT: +process.env.MYSQL_PORT,
+        NAME: process.env.MYSQL_NAME,
+        PASS: process.env.MYSQL_PASS,
+        USER: process.env.MYSQL_USER
+    },
+    jwt: {
+        SECRET: process.env.JWT_SECRET,
+        EXPIRED: process.env.JWT_EXPIRED
     }
 })
-const env = getEnv()
-
-export default env

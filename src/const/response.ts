@@ -1,7 +1,12 @@
 export const rMsg = ({
     unauthorized: "unauthorized",
-    jwtNotFound: "jwt required",
+    jwtRequired: "jwt required",
     jwtInvalid: "jwt invalid",
-    notFound: "data not found"
+    badRequest: "bad request",
+    forbidden: "forbidden access",
+    notFound: "data not found",
+    emailRegistered: "email registered already",
+    emailunRegistered: "email not registered",
+    invalidPassword: "invalid password"
 })
 

@@ -1,4 +1,6 @@
 import { RouteShorthandOptions } from "fastify";
-import { authentication } from "./auth.middleware";
+import { adminMiddleware, superUserMiddleware, userMiddleware } from "./auth.middleware";
 
-export const userAuth : RouteShorthandOptions = { preHandler: authentication }
+export const userAuth : RouteShorthandOptions = { preHandler: userMiddleware }
+export const adminAuth : RouteShorthandOptions = { preHandler: adminMiddleware }
+export const superUserAuth : RouteShorthandOptions = { preHandler: superUserMiddleware }
