@@ -8,7 +8,7 @@ import cors from '@fastify/cors'
 
 async function bootstrap() {
     await mysqlConnection()
-    const server = fastify({ logger: true })
+    const server = fastify({ logger: false })
     server.register(cors, {
         origin: "*"
     })

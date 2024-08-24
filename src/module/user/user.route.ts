@@ -4,7 +4,7 @@ import { AppDataSource } from "../../config/mysql.config"
 import { response } from "../../helper/response";
 import { Req, Res } from "../../interface/router";
 import { UserService } from "./user.service";
-import { userAuth } from "../../middleware/middleware";
+import { adminAuth } from "../../middleware/middleware";
 
 class UserRoute {
     static db = AppDataSource
@@ -18,5 +18,5 @@ class UserRoute {
 }
 
 export async function userRoutes(route: FastifyInstance) {
-    route.get("/", userAuth, (req, res) => UserRoute.getRelativeUser(req, res))
+    route.get("/", adminAuth, (req, res) => UserRoute.getRelativeUser(req, res))
 }

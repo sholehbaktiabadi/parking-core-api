@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { response } from "../../helper/response";
-import { Res } from "../../interface/router";
+import { Req, Res } from "../../interface/router";
 import { User } from "../../model/user.entity";
 import { Visitor } from "../../model/visitor.entity";
 import { PriceRepository } from "../price/price.repository";
@@ -8,6 +8,7 @@ import { CreateVisitorDto, UpdateVisitorDto } from "./dto/visitor.dto";
 import { VisitorRepository } from "./visitor.repository";
 import { rMsg } from "../../const/response";
 import { VisitorStatus } from "../../enum/visitor";
+import { PaginationDto } from "../../dto/pagination";
 
 export class VisitorService {
     constructor(
@@ -51,5 +52,9 @@ export class VisitorService {
         selected.quantity = quantity
         selected.grandTotal = grandTotal
         return await this.visitorRepo.update(id, selected)
+    }
+    
+    async getAll(_: Res, dto: PaginationDto){
+        return await this.visitorRepo.getAll(dto)
     }
 }

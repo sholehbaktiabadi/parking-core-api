@@ -5,12 +5,14 @@ import { VisitorRepository } from "./visitor.repository"
 import { VisitorService } from "./visitor.service"
 import { Req, Res } from "../../interface/router"
 import { CreateVisitorDto, UpdateVisitorDto } from "./dto/visitor.dto"
-import { response } from "../../helper/response"
+import { response, responsePaginate } from "../../helper/response"
 import { rMsg } from "../../const/response"
 import { decodeJwt } from "../../helper/jwt"
 import { User } from "../../model/user.entity"
 import { PriceRepository } from "../price/price.repository"
 import { validation } from "../../helper/validation"
+import { PaginationDto } from "../../dto/pagination"
+import { extractPaginate } from "../../helper/pagination"
 
 class VisitorRoute {
     static db = AppDataSource
@@ -47,10 +49,22 @@ class VisitorRoute {
         const data = await this.visitorService.update(r, +id, dataValue, user)
         return response(r, data)
     }
+
+    static async getAll(req: Req, r: Res){
+        const query = req.query
+        const paginate = new PaginationDto()
+        const dataValue = Object.assign(paginate, query)
+        const { valid, msg } = await validation(dataValue)
+        if(!valid) return response(r, msg, 400)
+        const pagination = extractPaginate(dataValue)
+        const [data, total] = await this.visitorService.getAll(r, pagination)
+        return responsePaginate(r, data, total, pagination.page, pagination.limit)
+    }
 }
 
 export async function visitorRoute(route: FastifyInstance) {
-    route.post("", userAuth, (req, res) => VisitorRoute.create(req, res))
+    route.get("", userAuth, (req, res) => VisitorRoute.getAll(req, res))
     route.get("/:id", userAuth, (req, res) => VisitorRoute.detail(req, res))
+    route.post("", userAuth, (req, res) => VisitorRoute.create(req, res))
     route.patch("/:id", userAuth, (req, res) => VisitorRoute.update(req, res))
 }

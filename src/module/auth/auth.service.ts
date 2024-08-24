@@ -16,7 +16,7 @@ export class AuthService {
         })
         if (!user) return response(r, rMsg.emailunRegistered)
         const isMatch = await compareHashPassword(password, user.password)
-        if (!isMatch) return response(r, rMsg.invalidPassword)
+        if (!isMatch) return response(r, rMsg.invalidPassword, 403)
         delete user.password
         return generateToken(user)
     }
