@@ -1,4 +1,4 @@
-import { IsDate, IsEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsDate, IsDateString, IsEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class PaginationDto{
     @IsString()
@@ -13,11 +13,11 @@ export class PaginationDto{
     @IsOptional()
     search: string;
 
-    @IsDate()
+    @IsDateString()
     @IsOptional()
     startDate: Date;
 
-    @IsDate()
+    @IsDateString()
     @IsOptional()
     endDate: Date;
     

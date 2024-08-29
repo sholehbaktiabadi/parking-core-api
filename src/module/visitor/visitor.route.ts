@@ -4,7 +4,7 @@ import { AppDataSource } from "../../config/mysql.config"
 import { VisitorRepository } from "./visitor.repository"
 import { VisitorService } from "./visitor.service"
 import { Req, Res } from "../../interface/router"
-import { CreateVisitorDto, UpdateVisitorDto } from "./dto/visitor.dto"
+import { CreateVisitorDto, UpdateVisitorDto, VisitorRequestDto } from "./dto/visitor.dto"
 import { response, responsePaginate } from "../../helper/response"
 import { rMsg } from "../../const/response"
 import { decodeJwt } from "../../helper/jwt"
@@ -47,16 +47,16 @@ class VisitorRoute {
         const { valid, msg } = await validation(dataValue)
         if(!valid) return response(r, msg, 400)
         const data = await this.visitorService.update(r, +id, dataValue, user)
-        return response(r, data)
+        return response(r, dataValue)
     }
 
     static async getAll(req: Req, r: Res){
         const query = req.query
-        const paginate = new PaginationDto()
+        const paginate = new VisitorRequestDto()
         const dataValue = Object.assign(paginate, query)
         const { valid, msg } = await validation(dataValue)
         if(!valid) return response(r, msg, 400)
-        const pagination = extractPaginate(dataValue)
+        const pagination: any = extractPaginate(dataValue)
         const [data, total] = await this.visitorService.getAll(r, pagination)
         return responsePaginate(r, data, total, pagination.page, pagination.limit)
     }

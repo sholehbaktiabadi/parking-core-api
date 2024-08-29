@@ -1,14 +1,13 @@
 import dayjs from "dayjs";
 import { response } from "../../helper/response";
-import { Req, Res } from "../../interface/router";
+import { Res } from "../../interface/router";
 import { User } from "../../model/user.entity";
 import { Visitor } from "../../model/visitor.entity";
 import { PriceRepository } from "../price/price.repository";
-import { CreateVisitorDto, UpdateVisitorDto } from "./dto/visitor.dto";
+import { CreateVisitorDto, UpdateVisitorDto, VisitorRequestDto } from "./dto/visitor.dto";
 import { VisitorRepository } from "./visitor.repository";
 import { rMsg } from "../../const/response";
 import { VisitorStatus } from "../../enum/visitor";
-import { PaginationDto } from "../../dto/pagination";
 
 export class VisitorService {
     constructor(
@@ -18,8 +17,8 @@ export class VisitorService {
 
     async detail(r: Res, id: number) {
         const selected = await this.visitorRepo.fetchOne({ where: { id } })
-        const { createdAt, timeUnit, price, departedAt } = selected
         if (!selected) return response(r, rMsg.notFound, 400)
+            const { createdAt, timeUnit, price, departedAt } = selected
         const timeSetPoint = departedAt ? dayjs(departedAt) : dayjs()
         const quantity = timeSetPoint.diff(createdAt, timeUnit)
         const grandTotal = quantity > 0 ? price * quantity : price
@@ -54,7 +53,15 @@ export class VisitorService {
         return await this.visitorRepo.update(id, selected)
     }
     
-    async getAll(_: Res, dto: PaginationDto){
-        return await this.visitorRepo.getAll(dto)
+    async getAll(_: Res, dto: VisitorRequestDto): Promise<[Visitor[], number]>{
+        const [visitors, count] = await this.visitorRepo.getAll(dto)
+        const data : Visitor[] = visitors.map(data => {
+            const timeSetPoint = data.departedAt ? dayjs(data.departedAt) : dayjs()
+            const quantity = timeSetPoint.diff(data.createdAt, data.timeUnit)
+            const grandTotal = quantity > 0 ? data.price * quantity : data.price
+            return { ...data, quantity, grandTotal }
+        })
+        return [data, count]
+
     }
 }

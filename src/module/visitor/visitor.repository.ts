@@ -1,6 +1,6 @@
 import { Between, DataSource, FindManyOptions, FindOneOptions, Repository } from "typeorm";
 import { Visitor } from "../../model/visitor.entity";
-import { PaginationDto } from "../../dto/pagination";
+import { VisitorRequestDto } from "./dto/visitor.dto";
 
 export class VisitorRepository {
     private visitorRepo: Repository<Visitor>
@@ -20,11 +20,11 @@ export class VisitorRepository {
         return this.visitorRepo.update({ id }, dto)
     }
 
-    getAll({ limit, skip, startDate, endDate }: PaginationDto) {
-        var query: FindManyOptions<Visitor> 
-        if (startDate && endDate){
-            query = { where: { createdAt: Between(startDate, endDate) } }
+    getAll({ limit, skip, type }: VisitorRequestDto) {
+        var query: FindManyOptions<Visitor>
+        if (type){
+            query = { where: { type } }
         }
-        return this.visitorRepo.findAndCount({ skip, take: limit, ...query })
+        return this.visitorRepo.findAndCount({ skip, take: limit, ...query, order: { createdAt: "DESC" } })
     }
 }
