@@ -1,8 +1,10 @@
 import { rMsg } from "../../const/response";
+import { UserRole } from "../../enum/user";
 import { compareHashPassword, hashPassword } from "../../helper/bcrypt";
 import { generateToken } from "../../helper/jwt";
 import { response } from "../../helper/response";
 import { Res } from "../../interface/router";
+import { User } from "../../model/user.entity";
 import { CreateUserDto } from "../user/dto/user.dto";
 import { UserRepository } from "../user/user.repository";
 import { SignIn } from "./dto/sign-in.dto";
@@ -28,10 +30,11 @@ export class AuthService {
             where: { email }, select: ['id']
         })
         if (isEmailExist) return response(r, rMsg.emailRegistered, 400)
-        const created = await this.userRepo.create(dto)
+        const createPaylaod = {...dto, role: UserRole.USER} as User
+        const created = await this.userRepo.create(createPaylaod)
         const user = await this.userRepo.fetchOne({
             where:
-                { id: created.id }, select: ['id', 'name', 'email', 'role', 'subscription']
+                { id: created.id }, select: ['id', 'name', 'email', 'role', 'password', 'subscription']
         })
         const token = generateToken(user)
         return { ...user, token }
