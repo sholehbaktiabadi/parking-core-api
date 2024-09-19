@@ -9,54 +9,54 @@ import { User } from "../model/user.entity";
 
 export function userMiddleware(req: Req, r: Res, done: HookHandlerDoneFunction) {
     const auth = req.headers.authorization
-    if (!auth) return response(r, rMsg.jwtRequired, 400)
+    if (!auth) return response(r, rMsg.jwtRequired, 401)
     const [_, token] = auth.split(" ")
-    if (!token) return response(r, rMsg.jwtRequired, 400)
+    if (!token) return response(r, rMsg.jwtRequired, 401)
     const { role } = jwt.decode(token) as User
-    if (!role) return response(r, rMsg.forbidden, 403)
+    if (!role) return response(r, rMsg.forbidden, 401)
     const getAllowedRoles = allowedRoles(UserRole.USER)
     const isAllowed = getAllowedRoles.includes(role)
-    if (!isAllowed) return response(r, rMsg.forbidden, 403)
+    if (!isAllowed) return response(r, rMsg.forbidden, 401)
     try {
         jwt.verify(token, env.jwt.SECRET)
     } catch {
-        return response(r, rMsg.jwtInvalid, 403)
+        return response(r, rMsg.jwtInvalid, 401)
     }
     done()
 }
 
 export function adminMiddleware(req: Req, r: Res, done: HookHandlerDoneFunction) {
     const auth = req.headers.authorization
-    if (!auth) return response(r, rMsg.jwtRequired, 400)
+    if (!auth) return response(r, rMsg.jwtRequired, 401)
     const [_, token] = auth.split(" ")
-    if (!token) return response(r, rMsg.jwtRequired, 400)
+    if (!token) return response(r, rMsg.jwtRequired, 401)
     const { role } = jwt.decode(token) as User
-    if (!role) return response(r, rMsg.forbidden, 403)
+    if (!role) return response(r, rMsg.forbidden, 401)
     const getAllowedRoles = allowedRoles(UserRole.ADMIN)
     const isAllowed = getAllowedRoles.includes(role)
-    if (!isAllowed) return response(r, rMsg.forbidden, 403)
+    if (!isAllowed) return response(r, rMsg.forbidden, 401)
     try {
         jwt.verify(token, env.jwt.SECRET)
     } catch {
-        return response(r, rMsg.jwtInvalid, 403)
+        return response(r, rMsg.jwtInvalid, 401)
     }
     done()
 }
 
 export function superUserMiddleware(req: Req, r: Res, done: HookHandlerDoneFunction) {
     const auth = req.headers.authorization
-    if (!auth) return response(r, rMsg.jwtRequired, 400)
+    if (!auth) return response(r, rMsg.jwtRequired, 401)
     const [_, token] = auth.split(" ")
-    if (!token) return response(r, rMsg.jwtRequired, 400)
+    if (!token) return response(r, rMsg.jwtRequired, 401)
     const { role } = jwt.decode(token) as User
-    if (!role) return response(r, rMsg.forbidden, 403)
+    if (!role) return response(r, rMsg.forbidden, 401)
     const getAllowedRoles = allowedRoles(UserRole.SUPER_USER)
     const isAllowed = getAllowedRoles.includes(role)
-    if (!isAllowed) return response(r, rMsg.forbidden, 403)
+    if (!isAllowed) return response(r, rMsg.forbidden, 401)
     try {
         jwt.verify(token, env.jwt.SECRET)
     } catch {
-        return response(r, rMsg.jwtInvalid, 403)
+        return response(r, rMsg.jwtInvalid, 401)
     }
     done()
 }

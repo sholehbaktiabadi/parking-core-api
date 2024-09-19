@@ -1,9 +1,9 @@
 import { rMsg } from "../../const/response";
 import { UserRole } from "../../enum/user";
 import { compareHashPassword, hashPassword } from "../../helper/bcrypt";
-import { generateToken } from "../../helper/jwt";
+import { generateToken, verifyJwt } from "../../helper/jwt";
 import { response } from "../../helper/response";
-import { Res } from "../../interface/router";
+import { Req, Res } from "../../interface/router";
 import { User } from "../../model/user.entity";
 import { CreateUserDto } from "../user/dto/user.dto";
 import { UserRepository } from "../user/user.repository";
@@ -11,7 +11,11 @@ import { SignIn } from "./dto/sign-in.dto";
 
 export class AuthService {
     constructor(private userRepo: UserRepository) { }
-
+    
+    verifyToken(req: Req){
+        return verifyJwt(req)
+    }
+    
     async signIn(r: Res, { email, password }: SignIn) {
         const user = await this.userRepo.fetchOne({
             where: { email }, select: ['id', 'name', 'email', 'role', 'password', 'subscription']
