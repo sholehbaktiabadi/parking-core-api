@@ -5,7 +5,8 @@
   "main": "app.ts",
   "scripts": {
     "build": "rimraf ./build && tsc",
-    "dev": "nodemon src/app.ts"
+    "dev": "nodemon src/app.ts",
+    "start": "node build/app.js"
   },
   "author": "sholehbaktiabadi",
   "license": "ISC",
