@@ -10,7 +10,5 @@ COPY . /app
 # install and build
 RUN  npm install && npm run build
 
-EXPOSE 5001
-
 # run service
 CMD ["npm", "run", "start"]
