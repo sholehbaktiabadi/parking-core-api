@@ -13,6 +13,15 @@ class AuthRoute {
     static userRepo = new UserRepository(AuthRoute.db)
     static authService = new AuthService(AuthRoute.userRepo)
 
+    static verifyToken(req: Req, r: Res) {
+        try {
+            const data = this.authService.verifyToken(req)
+            return response(r, data)
+        } catch (error) {
+            return response(r, error, 401)
+        }
+    }
+    
     static async login(req: Req, r: Res) {
         const body = req.body
         const user = new SignIn()
@@ -36,4 +45,5 @@ class AuthRoute {
 export async function authRoute(route: FastifyInstance) {
     route.post("/register", (req, res) => AuthRoute.register(req, res))
     route.post("/login", (req, res) => AuthRoute.login(req, res))
+    route.get("/verify-token", (req, res) => AuthRoute.verifyToken(req, res))
 }
