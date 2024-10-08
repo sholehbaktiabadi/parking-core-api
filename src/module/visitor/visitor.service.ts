@@ -59,7 +59,7 @@ export class VisitorService {
             const timeSetPoint = data.departedAt ? dayjs(data.departedAt) : dayjs()
             const quantity = timeSetPoint.diff(data.createdAt, data.timeUnit)
             const grandTotal = quantity > 0 ? data.price * quantity : data.price
-            return { ...data, quantity, grandTotal }
+            return { ...data, quantity: quantity == 0 ? 1 : quantity , grandTotal }
         })
         return [data, count]
 

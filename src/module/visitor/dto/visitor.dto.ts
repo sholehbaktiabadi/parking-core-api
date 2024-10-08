@@ -32,5 +32,6 @@ export class UpdateVisitorDto{
 export class VisitorRequestDto extends PaginationDto{
     @IsEnum(VisitorEnum)
     @IsString()
+    @IsOptional()
     type: VisitorEnum
 }
