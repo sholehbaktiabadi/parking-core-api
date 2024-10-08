@@ -21,7 +21,7 @@ export class Visitor extends Base{
     quantity: number
 
     @Column({ nullable: true, name: "grand_total" })
-    grandTotal: number
+    grandTotal: string
 
     @Column({ nullable: true, enum: VisitorStatus, default: VisitorStatus.INPROGRESS, type: 'enum' })
     status: VisitorStatus

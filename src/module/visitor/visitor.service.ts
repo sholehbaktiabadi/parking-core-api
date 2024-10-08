@@ -8,6 +8,7 @@ import { CreateVisitorDto, UpdateVisitorDto, VisitorRequestDto } from "./dto/vis
 import { VisitorRepository } from "./visitor.repository";
 import { rMsg } from "../../const/response";
 import { VisitorStatus } from "../../enum/visitor";
+import { CurrencyFmt } from "../../helper/formatter";
 
 export class VisitorService {
     constructor(
@@ -22,7 +23,7 @@ export class VisitorService {
         const timeSetPoint = departedAt ? dayjs(departedAt) : dayjs()
         const quantity = timeSetPoint.diff(createdAt, timeUnit)
         const grandTotal = quantity > 0 ? price * quantity : price
-        const result = { ...selected, quantity, grandTotal }
+        const result = { ...selected, quantity, grandTotal: CurrencyFmt(grandTotal) }
         return result
     }
 
@@ -49,7 +50,7 @@ export class VisitorService {
         selected.status = status
         selected.reason = reason
         selected.quantity = quantity
-        selected.grandTotal = grandTotal
+        selected.grandTotal = grandTotal.toString()
         return await this.visitorRepo.update(id, selected)
     }
     
@@ -59,7 +60,7 @@ export class VisitorService {
             const timeSetPoint = data.departedAt ? dayjs(data.departedAt) : dayjs()
             const quantity = timeSetPoint.diff(data.createdAt, data.timeUnit)
             const grandTotal = quantity > 0 ? data.price * quantity : data.price
-            return { ...data, quantity: quantity == 0 ? 1 : quantity , grandTotal }
+            return { ...data, quantity: quantity == 0 ? 1 : quantity , grandTotal: CurrencyFmt(grandTotal) }
         })
         return [data, count]
 
